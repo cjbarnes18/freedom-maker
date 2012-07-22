@@ -11,13 +11,5 @@ function plugserver_setup {
     prerequisite_config
 }
 
-plugserver_setup
-
-# harden the system
-# anomaly_setup
-
-# configure a firewall
-# firewall_setup
-
-# install ikiwiki!
-wiki_setup
+# cd /home/fbx/plugserver/setup/
+# bash setup.sh
