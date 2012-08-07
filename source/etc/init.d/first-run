@@ -29,8 +29,10 @@ function tweak-kernel {
 function wifi-ap-setup {
     # configure wireless access point with spinifex's prebuilt firmware
 
+    echo "Sleeping 30s for DHCP"
     sleep 30    # wait for dhcp
 
+    echo "Installing UAP Firmware."
     wget -O /tmp/marvell_wifi_firmware.tar.gz http://www.spinifex.com.au/plugs/downloads/dreamplug/marvell_wifi_firmware.tar.gz
     tar -C /tmp -zxf /tmp/marvell_wifi_firmware.tar.gz
     mkdir -p /lib/firmware/mrvl
@@ -39,19 +41,27 @@ function wifi-ap-setup {
 
 function create-keys {
     echo "Creating Keys."
-    echo "Well, not really."
+
+    echo "Creating SSH keys."
+    rm /etc/ssh/ssh_host_*
+    dpkg-reconfigure openssh-server
+
+    echo "Need to create other keys."
+    # gpg --batch --gen-key
+    # see http://lists.gnupg.org/pipermail/gnupg-users/2003-March/017376.html
 }
 
 function remove-self {
-    # vanish.
-
+    rm -f /etc/init.d/first-run
+    rm -f /etc/rc1.d/S01first-run
+    rm -f /etc/rc2.d/S01first-run
     rm /etc/init.d/first-run
     rm /etc/rc1.d/S01first-run
     rm /etc/rc2.d/S01first-run
 }
 
 create-keys
-wifi-ap-setup
+# wifi-ap-setup
 
 # the last things we do before quitting.
 tweak-kernel

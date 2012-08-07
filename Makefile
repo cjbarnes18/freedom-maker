@@ -18,6 +18,7 @@ ARCHIVE = $(NAME).tar.bz2
 LOOP = /dev/loop0
 
 # populate a tree with DreamPlug root filesystem
+rootfs: rootfs-$(ARCHITECTURE)
 rootfs-$(ARCHITECTURE): multistrap-configs/fbx-base.conf \
 		multistrap-configs/fbx-$(ARCHITECTURE).conf \
 		mk_dreamplug_rootfs \
@@ -35,7 +36,6 @@ image: rootfs-$(ARCHITECTURE)
 	sudo mkdir -p $(BOOTPOINT)
 	mount $(BOOTPOINT)
 	sudo rsync -atvz --progress --delete --exclude=boot $(BUILD_DIR)/ $(MOUNTPOINT)/
-	cp kernel/* $(BOOTPOINT)/
 	cp $(BUILD_DIR)/boot/* $(BOOTPOINT)/
 ifeq ($(DESTINATION),usb)
 # prevent the first-run script from running during boot.
@@ -59,6 +59,9 @@ endif
 	umount $(MOUNTPOINT)
 	@echo "Build complete."
 
+# build a virtualbox image
+virtualbox-image: stamp-vbox-predepend
+	./mk_virtualbox_image freedombox-unstable_$(TODAY)_virtualbox-i386-hdd
 
 # build the weekly test image
 weekly-image: image
@@ -78,16 +81,25 @@ endif
 #
 
 # install required files so users don't need to do it themselves.
+stamp-predepend:
+	sudo sh -c "apt-get install multistrap qemu-user-static u-boot-tools git mercurial"
+	touch stamp-predepend
+
+stamp-vbox-predepend:
+	sudo sh -c "apt-get install debootstrap extlinux qemu-utils parted mbr kpartx python-cliapp"
+	touch stamp-vbox-predepend
+
+# install required files so users don't need to do it themselves.
 predepend:
 	sudo sh -c "apt-get install multistrap qemu-user-static u-boot-tools git mercurial"
 	touch predepend
 
 clean:
-	rm -f rootfs
 # just in case I tried to build before plugging in the USB drive.
 	-sudo umount `pwd`/$(BUILD_DIR)/var/cache/apt/
 	sudo rm -rf $(BUILD_DIR)
-	-rm $(IMAGE) $(ARCHIVE)
+	-rm -f $(IMAGE) $(ARCHIVE)
+	-rm -f rootfs-* stamp-*
 
 distclean: clean clean-card
 	sudo rm -rf build
