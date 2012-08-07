@@ -4,10 +4,9 @@ import crypt
 import os
 import subprocess
 import sys
-
-def runcmd(argv, stdin='', ignore_fail=False, **kwargs):
-    p = subprocess.Popen(argv, stdin=subprocess.PIPE, 
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE, 
+ def runcmd(argv, stdin='', ignore_fail=False, **kwargs):
+    p = subprocess.Popen(argv, stdin=subprocess.PIPE,
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                          **kwargs)
     out, err = p.communicate(stdin)
     if p.returncode != 0:
@@ -28,22 +27,26 @@ runcmd(['chroot', rootdir, 'usermod', '-p', encrypted, 'freedombox'])
 
 #Create all projects
 
-runcmd(['chroot', rootdir, 'git', 'clone', 
-        'git://github.com/NickDaly/Plinth.git', 
+runcmd(['chroot', rootdir, 'git', 'clone',
+        'git://github.com/NickDaly/Plinth.git',
         '/home/freedombox/plinth'])
 
-runcmd(['chroot', rootdir, 'git', 'clone', 
-        'git://github.com/jvasile/freedombox-privoxy', 
+runcmd(['chroot', rootdir, 'git', 'clone',
+        'git://github.com/jvasile/freedombox-privoxy',
         '/home/freedombox/freedombox-privoxy'])
 
-runcmd(['chroot', rootdir, 'git', 'clone', 
-        'git://github.com/jvasile/withsqlite.git', 
+runcmd(['chroot', rootdir, 'git', 'clone',
+        'git://github.com/bnewbold/exmachina.git',
+        '/home/freedombox/exmachnia'])
+
+runcmd(['chroot', rootdir, 'git', 'clone',
+        'git://github.com/jvasile/withsqlite.git',
         '/home/freedombox/withsqlite'])
 
-runcmd(['chroot', rootdir, 'hg', 'clone', 
-        'https://hg@bitbucket.org/nickdaly/plugserver', 
+runcmd(['chroot', rootdir, 'hg', 'clone',
+        'https://hg@bitbucket.org/nickdaly/plugserver',
         '/home/freedombox/plugserver'])
 
-runcmd(['chroot', rootdir, 'chown', '-R', 
-        '1000:1000', 
+runcmd(['chroot', rootdir, 'chown', '-R',
+        '1000:1000',
         '/home/freedombox'])
