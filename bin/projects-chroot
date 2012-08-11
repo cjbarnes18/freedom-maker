@@ -11,5 +11,14 @@ function plugserver_setup {
     prerequisite_config
 }
 
+function plugserver_install {
+    # actually install the stuff.
+
+    cd /home/fbx/plugserver/setup/
+    bash wiki/setup.sh
+}
+
 # cd /home/fbx/plugserver/setup/
 # bash setup.sh
+
+plugserver_setup
