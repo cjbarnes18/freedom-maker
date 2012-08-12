@@ -18,5 +18,5 @@ function plugserver_install {
     bash wiki/setup.sh 1
 }
 
-plugserver_setup
-plugserver_install
+# plugserver_setup
+# plugserver_install
