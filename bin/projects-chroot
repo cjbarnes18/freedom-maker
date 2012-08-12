@@ -18,8 +18,5 @@ function plugserver_install {
     bash wiki/setup.sh 1
 }
 
-# cd /home/fbx/plugserver/setup/
-# bash setup.sh
-
 plugserver_setup
 plugserver_install
